@@ -19,7 +19,7 @@
 
 
     <node name="gazebo" pkg="gazebo_ros" type="gzserver" output="screen"
-        args="$(arg world_file)" />
+        args="$(arg world_file) --verbose"/>
 
     <group if="$(arg rviz)">
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find actor_services)/rviz/tf_show.rviz"/>

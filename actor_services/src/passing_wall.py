@@ -16,6 +16,8 @@ from copy import deepcopy
 import yaml
 import rospy
 
+import actor_collision_plugin
+
 rospack = rospkg.RosPack()
 
 plugin_pkg_path = rospack.get_path("actor_plugin")
@@ -103,6 +105,7 @@ for item in range(2):
     plugin.append(target)
     plugin.append(ignore_obstacle)
     actor.append(plugin)
+    actor.append(actor_collision_plugin.actor_collision_plugin_element)
 
     world_.append(actor)
 
