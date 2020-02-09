@@ -18,7 +18,7 @@
 #include <functional>
 #include <ignition/math.hh>
 #include <gazebo/physics/physics.hh>
-#include <gazebo/math/gzmath.hh>
+// #include <gazebo/math/gzmath.hh>
 #include <std_msgs/Float32MultiArray.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Pose.h>
@@ -258,13 +258,13 @@ void ActorPlugin::OnUpdate(const common::UpdateInfo &_info)
 
   ignition::math::Angle yaw_update = atan2(this->velocity.Y(), this->velocity.X()) + 0.5*PI - rpy.Z();
   yaw_update.Normalize();
-  
+
   double temp_vel = this->velocity.Length();
-  
+
   // Rotate in place, instead of jumping.
   if (std::fabs(yaw_update.Radian()) > (this->maxAngleUpdate/180.0 * PI)){
     double yaw_update_sign = yaw_update.Radian()/std::fabs(yaw_update.Radian());
-    yaw_update = this->maxAngleUpdate/180 * PI*yaw_update_sign;  
+    yaw_update = this->maxAngleUpdate/180 * PI*yaw_update_sign;
   }
   ignition::math::Angle new_yaw = rpy.Z()+yaw_update.Radian()-0.5*PI;
   this->velocity.X() = temp_vel * cos(yaw_update.Radian()) * cos(new_yaw.Radian());
@@ -280,7 +280,7 @@ void ActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   double distanceTraveled = (pose.Pos() -
       this->actor->WorldPose().Pos()).Length();
 
-  CallPublisher(a, pos.Normalize(), socialForce_, new_yaw.Radian()); 
+  CallPublisher(a, pos.Normalize(), socialForce_, new_yaw.Radian());
   this->actor->SetWorldPose(pose, false, false);
   this->actor->SetScriptTime(this->actor->ScriptTime() +
       (distanceTraveled * this->animationFactor));
@@ -305,7 +305,7 @@ void ActorPlugin::OnUpdate(const common::UpdateInfo &_info)
     this->target = temp;
     pos = this->target - pose.Pos();
   }
-  
+
 }
 
 // Set target position service callback. Response is the target position right now
@@ -363,18 +363,18 @@ void ActorPlugin::QueueThread()
 }
 
 void ActorPlugin::CallPublisher(
-    ignition::math::Vector3d af_, 
-    ignition::math::Vector3d pos_, 
-    ignition::math::Vector3d sf_, 
+    ignition::math::Vector3d af_,
+    ignition::math::Vector3d pos_,
+    ignition::math::Vector3d sf_,
     double yaw_)
 {
 
   ignition::math::Angle force_direction_ = atan2(af_.Y(), af_.X()) - yaw_;
   force_direction_.Normalize();
-  
+
   ignition::math::Angle pos_direction_ = atan2(pos_.Y(), pos_.X()) - yaw_;
   pos_direction_.Normalize();
-  
+
   ignition::math::Angle sf_direction_ = atan2(sf_.Y(), sf_.X()) - yaw_;
   sf_direction_.Normalize();
 
@@ -388,7 +388,7 @@ void ActorPlugin::CallPublisher(
   //  ROS_ERROR("%s, force x: %lf, force y: %lf", this->actor->GetName().c_str(), actor_vel_twist.angular.x, actor_vel_twist.angular.y);
   //}
   actor_vel_twist.angular.z = sf_.Length()*sin(sf_direction_.Radian());
-  VelPublisher.publish(actor_vel_twist);   
+  VelPublisher.publish(actor_vel_twist);
 }
 
 void ActorPlugin::get_ros_parameters(const ros::NodeHandlePtr rosNodeConstPtr){
