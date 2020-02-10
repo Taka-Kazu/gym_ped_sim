@@ -4,7 +4,7 @@
    <rosparam command="load" file="$(find turtlebot3_social)/param/forceFactors.yaml" />
      <param name="BASE_WORLD" type="string" value="empty.world" />
     <param name="TB3_WITH_ACTOR" type="string" value="actor0" />
-    <node name="create_world" pkg="actor_services" type="passing_wall.py"/>
+    <node name="create_world" pkg="actor_services" type="random_create_crowd.py"/>
     <node name="tfodom2actor" pkg="turtlebot3_social" type="tfodom2actor.py"/>
 
     <arg name="world_file"  default="$(find actor_services)/worlds/ped_world.world"/>

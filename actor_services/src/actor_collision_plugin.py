@@ -4,7 +4,9 @@
 from lxml import etree
 from lxml.etree import Element
 
-actor_collision_plugin_element = etree.fromstring('\
+
+def get_actor_collisions_plugin_element():
+    actor_collisions_plugin_element = etree.fromstring('\
 <?xml version="1.0"?>\
 <plugin name="actor_collisions_plugin" filename="libActorCollisionsPlugin.so">\
 <scaling collision="LHipJoint_LeftUpLeg_collision" scale="\
@@ -55,7 +57,7 @@ actor_collision_plugin_element = etree.fromstring('\
 <scaling collision="Spine_Spine1_collision" scale="\
 0.01 \
 0.001 \
-0.001 \
+0.001\
 "/>\
 <scaling collision="Neck_Neck1_collision" scale="\
 0.01 \
@@ -75,7 +77,7 @@ actor_collision_plugin_element = etree.fromstring('\
 <scaling collision="LeftArm_LeftForeArm_collision" scale="\
 5.0 \
 5.0 \
-1.0 \
+1.0\
 "/>\
 <scaling collision="LeftForeArm_LeftHand_collision" scale="\
 5.0 \
@@ -109,3 +111,4 @@ actor_collision_plugin_element = etree.fromstring('\
 "/>\
 </plugin>\
 ')
+    return actor_collisions_plugin_element

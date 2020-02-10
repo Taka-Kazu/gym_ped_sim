@@ -10,11 +10,11 @@ Info:
 import random
 import numpy as np
 import rospkg
+import rospy
 from lxml import etree
 from lxml.etree import Element
 from copy import deepcopy
 import yaml
-import rospy
 
 import actor_collision_plugin
 
@@ -39,21 +39,19 @@ skin_list = ["moonwalk.dae",
         "talk_b.dae",
         "walk.dae"]
 
-distance = 5
 startingPosition = dict()
 targetPosition = dict()
 speedOfActor = dict()
-startingPosition[0] = (-distance/2, 0)
-targetPosition[0] = (distance/2, 0)
-speedOfActor[0] = 1.20
 
-startingPosition[1] = (distance/2, 0)
-targetPosition[1] = (-distance/2, 0)
-speedOfActor[1] = 1.20
+startingPosition = {0:(-3,-0.5), 1:(-2.5,0.5), 2:(3, -0.5), 3:(2.5,0.5)}
+targetPosition = {0: (2.5,-0.5), 1:(3,0.5),   2:(-2.5, -0.5), 3:(-3,0.5)}
+speedOfActor = {0:1.2,1:0.9,2:1.1,3:1.2}
+#for item in range(4):
+#    speedOfActor[item] = 1.00
 
 
 actor_list = []
-for item in range(2):
+for item in range(4):
     actor = Element("actor", name="actor"+str(item))
 
     pose = Element("pose")
@@ -75,9 +73,9 @@ for item in range(2):
     animation = Element("animation", name="walking")
     animate_fn = Element("filename")
     if (item==int(rospy.get_param("TB3_WITH_ACTOR")[-1])) and (not rospy.get_param("TB3_AS_ACTOR")):
-    	animate_fn.text = "stand.dae"
+        animate_fn.text = "stand.dae"
     else:
-    	animate_fn.text = "walk.dae"
+        animate_fn.text = "walk.dae"
     interpolate_x = Element("interpolate_x")
     interpolate_x.text = "true"
     animate_scale = Element("scale")
@@ -87,7 +85,7 @@ for item in range(2):
     animation.append(interpolate_x)
     actor.append(animation)
 
-    plugin = Element("plugin", name="None", filename=plugin_path)
+    plugin = Element("plugin", name="actor_plugin_ros", filename=plugin_path)
     speed = Element("speed")
     speed.text = str(speedOfActor[item])
     target = Element("target")
@@ -105,7 +103,8 @@ for item in range(2):
     plugin.append(target)
     plugin.append(ignore_obstacle)
     actor.append(plugin)
-    actor.append(actor_collision_plugin.get_actor_collisions_plugin_element())
+    acpe = actor_collision_plugin.get_actor_collisions_plugin_element()
+    actor.append(acpe)
 
     world_.append(actor)
 
