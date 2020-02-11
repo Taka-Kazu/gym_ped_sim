@@ -43,15 +43,19 @@ startingPosition = dict()
 targetPosition = dict()
 speedOfActor = dict()
 
-startingPosition = {0:(-3,-0.5), 1:(-2.5,0.5), 2:(3, -0.5), 3:(2.5,0.5)}
-targetPosition = {0: (2.5,-0.5), 1:(3,0.5),   2:(-2.5, -0.5), 3:(-3,0.5)}
-speedOfActor = {0:1.2,1:0.9,2:1.1,3:1.2}
-#for item in range(4):
-#    speedOfActor[item] = 1.00
+num_actors = rospy.get_param("ACTOR_NUMBER")
 
+# startingPosition = {0:(-3,-0.5), 1:(-2.5,0.5), 2:(3, -0.5), 3:(2.5,0.5)}
+# targetPosition = {0: (2.5,-0.5), 1:(3,0.5),   2:(-2.5, -0.5), 3:(-3,0.5)}
+# speedOfActor = {0:1.2,1:0.9,2:1.1,3:1.2}
+
+for i in range(num_actors):
+    startingPosition[i] = tuple(np.random.rand(2) * 10 - 5)
+    targetPosition[i] = tuple(np.random.rand(2) * 10 - 5)
+    speedOfActor[i] = np.random.normal(1.2, 0.3)
 
 actor_list = []
-for item in range(4):
+for item in range(num_actors):
     actor = Element("actor", name="actor"+str(item))
 
     pose = Element("pose")
@@ -103,8 +107,8 @@ for item in range(4):
     plugin.append(target)
     plugin.append(ignore_obstacle)
     actor.append(plugin)
-    acpe = actor_collision_plugin.get_actor_collisions_plugin_element()
-    actor.append(acpe)
+    # acpe = actor_collision_plugin.get_actor_collisions_plugin_element()
+    # actor.append(acpe)
 
     world_.append(actor)
 
